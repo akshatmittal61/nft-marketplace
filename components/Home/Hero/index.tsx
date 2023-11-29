@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { Button, Typography } from "@/library";
-// import useConnectWallet from "../../../hooks/connect-wallet";
 import { IoCheckmark, IoCopyOutline } from "react-icons/io5";
 import { LuLogOut } from "react-icons/lu";
+import Image from "next/image";
+import useConnectWallet from "@/hooks/connect-wallet";
+import { Button, Typography } from "@/library";
 import { copyToClipboard, stylesConfig } from "@/utils/functions";
 import styles from "./styles.module.scss";
 
 const classes = stylesConfig(styles, "home-hero");
 
 const HomeHero = () => {
-	// const walletState = useConnectWallet();
-	const walletState = {
-		signer: {
-			address: "0x1234567890",
-		},
-		address: "0x1234567890",
-		connect: () => {},
-		disconnect: () => {},
-	};
+	const walletState = useConnectWallet();
 	const [buttonIcon, setButtonIcon] = useState(
 		<Image
 			src="/vectors/metamask.svg"
@@ -30,8 +22,21 @@ const HomeHero = () => {
 
 	const handleClick = () => {
 		if (!walletState?.signer) {
-			walletState.connect();
-			setButtonIcon(<IoCopyOutline />);
+			walletState
+				.connect()
+				.then(() => {
+					setButtonIcon(<IoCopyOutline />);
+				})
+				.catch(() => {
+					setButtonIcon(
+						<Image
+							src="/vectors/metamask.svg"
+							alt="metamask"
+							width={28}
+							height={28}
+						/>
+					);
+				});
 		} else {
 			copyToClipboard(walletState.signer.address);
 			setButtonIcon(<IoCheckmark />);

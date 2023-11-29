@@ -1,11 +1,24 @@
 import { useState } from "react";
 
 const useContextData = () => {
-	const [theme, setTheme] = useState<"light" | "dark">("light");
+	// Global Authentication State
+	const [loggedIn, setLoggedIn] = useState(false);
+	const [walletState, setWalletState] = useState<any>({
+		contract: null,
+		provider: null,
+		signer: null,
+		address: null,
+	});
+
+	const handleWalletState = (wallet: any) => {
+		setWalletState(wallet);
+	};
 
 	return {
-		theme,
-		setTheme,
+		loggedIn,
+		setLoggedIn,
+		walletState,
+		setWalletState: handleWalletState,
 	};
 };
 
