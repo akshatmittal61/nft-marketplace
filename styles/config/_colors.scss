@@ -276,6 +276,9 @@ $colors: (
 :root,
 :root::before,
 :root::after {
+	--color-black: var(--black);
+	--color-white: var(--white);
+
 	--theme-black: var(--black);
 	--theme-white: var(--white);
 	--theme-primary: var(--black);
